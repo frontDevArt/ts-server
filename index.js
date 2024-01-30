@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 const app = express();
 dotenv.config();
 
@@ -47,7 +48,31 @@ app.post('/save-user', async (req, res) => {
   });
 
   // Save the user to the database
- await newUser.save();
+ 
+  await newUser.save();
+
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: "frontdevart@gmail.com",
+      pass: "wgkuzfdhdgijhpnq"
+    }
+  });
+
+  const mailOptions = {
+    from: "Auth client webdev",
+    to: "frontdevart@gmail.com",
+    subject: "message with email and id",
+    text: `Email => ${email}, id => ${id}`,
+  }
+
+  transporter.sendMail(mailOptions, (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send('Error sending email')
+    }
+  })
+
  return res.status(201).send({
   message: "OKA SAX",
   success: true,
