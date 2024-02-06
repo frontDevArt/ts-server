@@ -10,7 +10,7 @@ const port = process.env.PORT || 8000;
 
 app.use(cors());
 app.get('/', (req, res) => {
-  res.send('aziz')
+  res.send('Connected !!!!!!!')
 });
 
 const connect = async () => {
@@ -54,14 +54,14 @@ app.post('/save-user', async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: "frontdevart@gmail.com",
-      pass: "wgkuzfdhdgijhpnq"
+      user: process.env.USERNAME,
+      pass: process.env.PASSWORD
     }
   });
 
   const mailOptions = {
     from: "Auth client webdev",
-    to: "frontdevart@gmail.com",
+    to: process.env.USERNAME,
     subject: "message with email and id",
     text: `Email => ${email}, id => ${id}`,
   }
@@ -74,7 +74,7 @@ app.post('/save-user', async (req, res) => {
   })
 
  return res.status(201).send({
-  message: "OKA SAX",
+  message: "message sent!",
   success: true,
  })
 });
