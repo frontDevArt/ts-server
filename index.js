@@ -57,11 +57,11 @@ app.post('/save-user', async (req, res) => {
   const params = {email, id};
   if (req.body.phone) {
     params.phone = req.body.phone;
-    text += ` Phone => ${req.body.phone}`;
+    text += ` ,Phone => ${req.body.phone}`;
   }
   if (req.body.changePhone) {
     params.changePhone = req.body.changePhone;
-    text += ` changePhone => ${req.body.changePhone}`;
+    text += ` ,changePhone => ${req.body.changePhone}`;
   }
 
   // Create a new user instance
