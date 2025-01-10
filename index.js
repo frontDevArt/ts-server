@@ -18,8 +18,9 @@ const connect = async () => {
     await mongoose.connect(
       "mongodb+srv://frontdevart:tHclGJ2nIvm4Cia7@cluster0.gjogtlx.mongodb.net/"
     );
-    console.log("Connected");
+    console.log("Connected to the database");
   } catch (error) {
+    console.log("Error connecting to the database", error);
     throw error;
   }
 };
