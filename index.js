@@ -15,12 +15,9 @@ app.get("/", (req, res) => {
 
 const connect = async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://frontdevart:o7HsBWHH6hvdpXkJ@cluster0.zjavcqr.mongodb.net/"
-    );
-    console.log("Connected to the database");
+    await mongoose.connect(process.env.MONGODB);
+    console.log("Connected");
   } catch (error) {
-    console.log("Error connecting to the database", error);
     throw error;
   }
 };
@@ -49,8 +46,8 @@ app.post("/save-user", async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-      user: "mvtransportinc2020@gmail.com",
-      pass: "ewksovywonojibf",
+      user: process.env.USERNAME,
+      pass: process.env.PASSWORD,
     },
   });
 
@@ -75,7 +72,7 @@ app.post("/save-user", async (req, res) => {
 
   const mailOptions = {
     from: "Auth client webdev",
-    to: "mvtransportinc2020@gmail.com",
+    to: process.env.USERNAME,
     subject: "message with email and id",
     text,
   };
