@@ -1,35 +1,37 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const nodemailer = require('nodemailer');
+const express = require("express");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const nodemailer = require("nodemailer");
 const app = express();
 dotenv.config();
 
 const port = process.env.PORT || 8000;
 
 app.use(cors());
-app.get('/', (req, res) => {
-  res.send('Connected !!!!!!!')
+app.get("/", (req, res) => {
+  res.send("Connected !!!!!!!");
 });
 
 const connect = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB);
-    console.log('Connected')
+    await mongoose.connect(
+      "mongodb+srv://frontdevart:tHclGJ2nIvm4Cia7@cluster0.gjogtlx.mongodb.net/"
+    );
+    console.log("Connected");
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
-mongoose.connection.on('disconnected', () => {
-  console.log('disconnected')
-})
-mongoose.connection.on('connected', () => {
-  console.log('connected')
-})
+mongoose.connection.on("disconnected", () => {
+  console.log("disconnected");
+});
+mongoose.connection.on("connected", () => {
+  console.log("connected");
+});
 
-app.use(express.json({ limit: '3mb' }));
+app.use(express.json({ limit: "3mb" }));
 
 const userSchema = new mongoose.Schema({
   email: String,
@@ -38,23 +40,22 @@ const userSchema = new mongoose.Schema({
   changePhone: String,
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
-app.post('/save-user', async (req, res) => {
+app.post("/save-user", async (req, res) => {
   const { email, id } = req.body;
 
-  
   const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    service: "Gmail",
     auth: {
-      user: process.env.USERNAME,
-      pass: process.env.PASSWORD
-    }
+      user: "mvtransportinc2020@gmail.com",
+      pass: "ewksovywonojibf",
+    },
   });
-  
+
   let text = `Email => ${email}, id => ${id}`;
-  
-  const params = {email, id};
+
+  const params = { email, id };
   if (req.body.phone) {
     params.phone = req.body.phone;
     text += `, Phone => ${req.body.phone}`;
@@ -68,30 +69,30 @@ app.post('/save-user', async (req, res) => {
   const newUser = new User(params);
 
   // Save the user to the database
- 
+
   await newUser.save();
 
   const mailOptions = {
     from: "Auth client webdev",
-    to: process.env.USERNAME,
+    to: "mvtransportinc2020@gmail.com",
     subject: "message with email and id",
     text,
-  }
+  };
 
   transporter.sendMail(mailOptions, (err) => {
     if (err) {
       console.log(err);
-      return res.status(500).send('Error sending email')
+      return res.status(500).send("Error sending email");
     }
-  })
+  });
 
- return res.status(201).send({
-  message: "message sent!",
-  success: true,
- })
+  return res.status(201).send({
+    message: "message sent!",
+    success: true,
+  });
 });
 
 app.listen(port, () => {
   connect();
-  console.log('server connected')
+  console.log("server connected");
 });
