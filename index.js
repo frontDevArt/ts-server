@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 const connect = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://frontdevart:tHclGJ2nIvm4Cia7@cluster0.gjogtlx.mongodb.net/"
+      "mongodb+srv://frontdevart:o7HsBWHH6hvdpXkJ@cluster0.zjavcqr.mongodb.net/"
     );
     console.log("Connected to the database");
   } catch (error) {
